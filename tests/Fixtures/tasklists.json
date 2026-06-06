@@ -1,0 +1,30 @@
+{
+    "tasklists": [
+        {
+            "id": 1,
+            "name": "Backend",
+            "projectId": 1,
+            "displayOrder": 1
+        },
+        {
+            "id": 2,
+            "name": "Frontend",
+            "projectId": 1,
+            "displayOrder": 2
+        },
+        {
+            "id": 3,
+            "name": "API",
+            "projectId": 2,
+            "displayOrder": 1
+        }
+    ],
+    "meta": {
+        "page": {
+            "pageOffset": 1,
+            "pageSize": 100,
+            "hasMore": false,
+            "count": 3
+        }
+    }
+}

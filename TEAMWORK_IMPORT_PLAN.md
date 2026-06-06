@@ -435,6 +435,53 @@ The import assumes the host already has:
 
 ---
 
+## Testing Strategy
+
+### Test types
+
+| Type | Layer | DB | HTTP | What's tested |
+|---|---|---|---|---|
+| Unit | Transformers | No | No | Field mapping, fallback logic, special coercions (name concat, estimateMinutes→hours, truncation) |
+| Feature | Persisters | SQLite in-memory | `Http::fake()` | API calls, transformation, model creation, ID mapping, skip logic, placeholder users |
+| Feature | ImportService | SQLite in-memory | `Http::fake()` | Entity ordering, skip-entity (resume), error handling, progress callbacks |
+| Feature | Command | SQLite in-memory | `Http::fake()` | CLI flags, resume detection, output formatting |
+
+### Test doubles
+
+- **Stub models** in `tests/stubs/Models/` mirror the LaraCollab host models (minimal Eloquent models with only the columns the import touches). The config `models` map is overridden in `TestCase` to point at these stubs.
+- **API responses** are JSON fixture files in `tests/fixtures/` modelled on the official Teamwork v3 OpenAPI spec (`view.User`, `company.CompaniesResponse`, `task.tasksResponseV205`, etc.). Pagination uses `meta.page.hasMore`.
+- **`Http::fake()`** intercepts all outgoing API calls and returns fixture data. The `ApiClient` never reaches a real endpoint.
+
+### Stub model relationships
+
+| Model | Needed for |
+|---|---|
+| `User` | `assignRole()` (no-op), `belongsToMany('project')` |
+| `Project` | `belongsToMany('user')` via `project_user` pivot |
+| `Task` | `belongsToMany('label')` via `label_task` pivot |
+
+### Fixture response structure
+
+All fixtures follow the OpenAPI spec:
+```json
+{
+  "people": [ ... ],
+  "meta": { "page": { "hasMore": false, "pageOffset": 1, "pageSize": 100, "count": 2 } }
+}
+```
+
+Or singular-wrapper where applicable: `{"tasks": {"task": [...]}}`.
+
+### Known bugs captured by tests
+
+`AttachmentPersister.php:36` references undefined variable `$taskIds` instead of `$versionTasks`. The `empty()` check on an undefined variable always returns `true`, so all files are skipped with `no_related_tasks`. The `foreach ($taskIds ...)` loop is dead code.
+
+`AttachmentPersister.php:28-31` does not resolve `user_id` from a raw Teamwork ID to a local LaraCollab user ID. Files with an `uploadedBy` / `uploadedByUserID` value pass the null check but the raw value is stored directly.
+
+`config/teamwork.php` tasks field_map is missing `createdByUserId`, leaving the `created_by_user_id` resolution logic in `TaskPersister` (`TaskPersister.php:63-67`) as dead code.
+
+---
+
 ## Known Scope Limits
 
 | Entity | Records | Imported | Skipped | Reason |

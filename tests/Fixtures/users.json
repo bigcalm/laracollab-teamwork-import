@@ -1,0 +1,54 @@
+{
+    "people": [
+        {
+            "id": 1,
+            "firstName": "John",
+            "lastName": "Doe",
+            "email": "john.doe@example.com",
+            "phone": "555-0101",
+            "title": "Senior Developer",
+            "userRate": 5000,
+            "avatarUrl": "https://example.com/avatars/1.jpg",
+            "companyId": 1,
+            "type": "user",
+            "isAdmin": false,
+            "deleted": false
+        },
+        {
+            "id": 2,
+            "firstName": "Jane",
+            "lastName": "Smith",
+            "email": "jane.smith@example.com",
+            "phone": "555-0102",
+            "title": "Project Manager",
+            "userRate": 7500,
+            "avatarUrl": null,
+            "companyId": 1,
+            "type": "user",
+            "isAdmin": true,
+            "deleted": false
+        },
+        {
+            "id": 3,
+            "firstName": "Bob",
+            "lastName": "",
+            "email": "",
+            "phone": null,
+            "title": null,
+            "userRate": null,
+            "avatarUrl": null,
+            "companyId": null,
+            "type": "user",
+            "isAdmin": false,
+            "deleted": false
+        }
+    ],
+    "meta": {
+        "page": {
+            "pageOffset": 1,
+            "pageSize": 100,
+            "hasMore": false,
+            "count": 3
+        }
+    }
+}

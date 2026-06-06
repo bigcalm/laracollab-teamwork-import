@@ -1,0 +1,36 @@
+{
+    "comments": [
+        {
+            "id": 1000,
+            "body": "Looks good to me!",
+            "postedByUserId": 1,
+            "objectId": 10,
+            "objectType": "task",
+            "projectId": 1
+        },
+        {
+            "id": 1001,
+            "body": "Need to fix this",
+            "postedBy": 2,
+            "objectId": 11,
+            "objectType": "task",
+            "projectId": 1
+        },
+        {
+            "id": 1002,
+            "body": "Comment on non-task",
+            "postedByUserId": 99,
+            "objectId": 42,
+            "objectType": "notebook",
+            "projectId": 1
+        }
+    ],
+    "meta": {
+        "page": {
+            "pageOffset": 1,
+            "pageSize": 100,
+            "hasMore": false,
+            "count": 3
+        }
+    }
+}

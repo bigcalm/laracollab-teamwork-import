@@ -1,0 +1,57 @@
+{
+    "timelogs": [
+        {
+            "id": 100,
+            "minutes": 60,
+            "personId": 1,
+            "taskId": 10,
+            "projectId": 1,
+            "description": "Database setup work",
+            "billable": true
+        },
+        {
+            "id": 101,
+            "minutes": 120,
+            "userId": 2,
+            "taskId": 10,
+            "projectId": 1,
+            "description": "Code review",
+            "billable": true
+        },
+        {
+            "id": 102,
+            "minutes": 30,
+            "loggedByUserId": 1,
+            "taskId": 11,
+            "projectId": 1,
+            "description": "Meeting",
+            "billable": false
+        },
+        {
+            "id": 103,
+            "minutes": 45,
+            "personId": 99,
+            "taskId": 99,
+            "projectId": 3,
+            "description": "Orphaned entry",
+            "billable": true
+        },
+        {
+            "id": 104,
+            "minutes": null,
+            "hoursDecimal": 1.5,
+            "personId": 1,
+            "taskId": 10,
+            "projectId": 1,
+            "description": "Deployment"
+        }
+    ],
+    "meta": {
+        "page": {
+            "pageOffset": 1,
+            "pageSize": 100,
+            "hasMore": false,
+            "count": 5
+        }
+    }
+}

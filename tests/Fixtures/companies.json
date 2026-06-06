@@ -1,0 +1,30 @@
+{
+    "companies": [
+        {
+            "id": 1,
+            "name": "Acme Corp",
+            "addressOne": "123 Main St",
+            "zip": "90210",
+            "city": "Los Angeles",
+            "state": "CA",
+            "countryCode": "US"
+        },
+        {
+            "id": 2,
+            "name": "Globex Inc",
+            "addressOne": "456 Oak Ave",
+            "zip": "10001",
+            "city": "New York",
+            "state": "NY",
+            "countryCode": "US"
+        }
+    ],
+    "meta": {
+        "page": {
+            "pageOffset": 1,
+            "pageSize": 100,
+            "hasMore": false,
+            "count": 2
+        }
+    }
+}

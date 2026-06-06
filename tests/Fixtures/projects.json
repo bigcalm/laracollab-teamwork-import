@@ -1,0 +1,26 @@
+{
+    "projects": [
+        {
+            "id": 1,
+            "name": "Website Redesign",
+            "description": "Redesign the company website",
+            "companyId": 1,
+            "status": "active"
+        },
+        {
+            "id": 2,
+            "name": "Mobile App",
+            "description": "Build the mobile application",
+            "companyId": 2,
+            "status": "active"
+        }
+    ],
+    "meta": {
+        "page": {
+            "pageOffset": 1,
+            "pageSize": 100,
+            "hasMore": false,
+            "count": 2
+        }
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "tags": [
+        {
+            "id": 1,
+            "name": "bug",
+            "color": "#ff0000",
+            "count": 10
+        },
+        {
+            "id": 2,
+            "name": "feature",
+            "color": "#00ff00",
+            "count": 5
+        },
+        {
+            "id": 3,
+            "name": "",
+            "color": "#cccccc",
+            "count": 0
+        }
+    ],
+    "meta": {
+        "page": {
+            "pageOffset": 1,
+            "pageSize": 100,
+            "hasMore": false,
+            "count": 3
+        }
+    }
+}

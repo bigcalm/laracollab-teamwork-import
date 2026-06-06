@@ -1,0 +1,56 @@
+{
+    "tasks": {
+        "task": [
+            {
+                "id": 10,
+                "name": "Set up database",
+                "description": "Create the database schema",
+                "estimateMinutes": 480,
+                "tasklistId": 1,
+                "assigneeUserIds": [1],
+                "projectId": 1,
+                "companyId": 1,
+                "createdByUserId": 2,
+                "tagIds": [1],
+                "priority": "high",
+                "status": "active"
+            },
+            {
+                "id": 11,
+                "name": "Design landing page",
+                "description": "Create wireframes for landing page",
+                "estimateMinutes": 240,
+                "tasklistId": 2,
+                "assigneeUserIds": [1, 2],
+                "projectId": 1,
+                "companyId": 1,
+                "createdByUserId": 2,
+                "tagIds": [2],
+                "priority": "medium",
+                "status": "active"
+            },
+            {
+                "id": 12,
+                "name": "Build REST endpoints",
+                "description": null,
+                "estimateMinutes": null,
+                "tasklistId": 3,
+                "assigneeUserIds": [],
+                "projectId": 2,
+                "companyId": 2,
+                "createdByUserId": 99,
+                "tagIds": [],
+                "priority": null,
+                "status": "active"
+            }
+        ]
+    },
+    "meta": {
+        "page": {
+            "pageOffset": 1,
+            "pageSize": 100,
+            "hasMore": false,
+            "count": 3
+        }
+    }
+}

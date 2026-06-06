@@ -51,3 +51,15 @@ php artisan teamwork:import --queue
 7. Time Logs
 8. Comments
 9. Attachments
+
+## Testing
+
+```bash
+composer install
+vendor/bin/phpunit
+```
+
+Tests use an in-memory SQLite database and `Http::fake()` to stub the Teamwork API. No real API credentials needed. Fixtures in `tests/Fixtures/` are modelled on the Teamwork v3 OpenAPI spec.
+
+- **Unit tests** cover transformers (pure data mapping, no DB)
+- **Feature tests** cover persisters, the import service, and the CLI command
