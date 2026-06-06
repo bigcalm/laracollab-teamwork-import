@@ -1,0 +1,25 @@
+{
+    "name": "bigcalm/laracollab-teamwork-import",
+    "description": "Import data from Teamwork.com API v3 into LaraCollab",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^11.0",
+        "spatie/laravel-permission": "^6.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaraCollab\\TeamworkImport\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaraCollab\\TeamworkImport\\TeamworkImportServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
