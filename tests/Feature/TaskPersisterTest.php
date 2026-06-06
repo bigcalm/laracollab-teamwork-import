@@ -100,6 +100,62 @@ class TaskPersisterTest extends TestCase
         $this->assertTrue($task->labels()->where('label_id', $label->id)->exists());
     }
 
+    public function test_creates_placeholder_user_for_unknown_creator(): void
+    {
+        $project = Project::create(['name' => 'Test']);
+        $taskGroup = TaskGroup::create(['name' => 'Backend', 'project_id' => $project->id, 'color' => '#000']);
+        $user = User::create(['name' => 'John', 'email' => 'john@example.com', 'password' => 'hash']);
+
+        $importRun = ImportRun::create(['status' => 'running', 'started_at' => now()]);
+
+        IdMapping::create([
+            'teamwork_id' => 1,
+            'teamwork_type' => 'project',
+            'local_id' => $project->id,
+            'local_type' => (new Project)->getMorphClass(),
+            'import_run_id' => $importRun->id,
+        ]);
+
+        IdMapping::create([
+            'teamwork_id' => 1,
+            'teamwork_type' => 'user',
+            'local_id' => $user->id,
+            'local_type' => (new User)->getMorphClass(),
+            'import_run_id' => $importRun->id,
+        ]);
+
+        IdMapping::create([
+            'teamwork_id' => 2,
+            'teamwork_type' => 'user',
+            'local_id' => $user->id,
+            'local_type' => (new User)->getMorphClass(),
+            'import_run_id' => $importRun->id,
+        ]);
+
+        Http::fake([
+            'test.teamwork.com/projects/api/v3/projects/1/tasks.json*' => Http::response(
+                json_decode(file_get_contents(__DIR__ . '/../Fixtures/tasks.json'), true)
+            ),
+        ]);
+
+        $persister = new TaskPersister($importRun, new ApiClient, new IdMappingService);
+        $result = $persister->run();
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'deleted-99@teamwork-import.local',
+            'name' => '[deleted user (99)]',
+        ]);
+
+        $hasPlaceholderSkip = false;
+        foreach ($result['skipped'] as $s) {
+            if ($s['reason'] === 'created_placeholder_user') {
+                $hasPlaceholderSkip = true;
+                break;
+            }
+        }
+        $this->assertTrue($hasPlaceholderSkip);
+    }
+
     public function test_creates_default_task_group_for_unmatched_tasklist(): void
     {
         $project = Project::create(['name' => 'Test']);

@@ -134,6 +134,7 @@ return [
                 'estimateMinutes'  => 'estimation',
                 'tasklistId'       => 'group_id',
                 'assigneeUserIds'  => 'assigned_to_user_id',
+                'createdByUserId'  => 'created_by_user_id',
                 'projectId'        => 'project_id',
                 'companyId'        => 'client_company_id',
             ],

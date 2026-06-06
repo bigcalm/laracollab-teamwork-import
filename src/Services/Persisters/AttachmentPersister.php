@@ -25,20 +25,24 @@ class AttachmentPersister extends BasePersister
             $fileId = $fileData['id'] ?? null;
             $attributes = $this->transform($fileData);
 
-            if (($attributes['user_id'] ?? null) === null) {
+            $rawUserId = $attributes['user_id'] ?? null;
+
+            if ($rawUserId !== null) {
+                $attributes['user_id'] = $this->resolveLocalIdForType($rawUserId, 'user')
+                    ?? $this->resolveOrCreatePlaceholderUser($rawUserId, $skipped);
+            } else {
                 $skipped[] = ['id' => $fileId, 'reason' => 'missing_user'];
                 continue;
             }
 
-            $version = $fileData['version'] ?? [];
-            $versionTasks = $version['tasks'] ?? [];
+            $versionTasks = $fileData['version']['tasks'] ?? [];
 
-            if (empty($taskIds)) {
+            if (empty($versionTasks)) {
                 $skipped[] = ['id' => $fileId, 'reason' => 'no_related_tasks'];
                 continue;
             }
 
-            foreach ($taskIds as $taskId) {
+            foreach ($versionTasks as $taskId) {
                 $localTaskId = $this->resolveLocalIdForType((int) $taskId, 'task');
 
                 if ($localTaskId === null) {
