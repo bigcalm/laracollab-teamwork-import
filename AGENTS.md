@@ -4,11 +4,13 @@ Self-contained Laravel package that imports data from Teamwork.com API v3 into a
 
 ## Setup
 
+The package is installed into a LaraCollab host. Substitute `ddev` or `sail` below based on your environment.
+
 ```bash
 cd /path/to/lara-collab
-ddev composer require bigcalm/laracollab-teamwork-import:@dev
-ddev artisan vendor:publish --tag=teamwork-config --force
-ddev artisan migrate
+ddev composer require bigcalm/laracollab-teamwork-import:@dev   # or: sail composer require ...
+ddev artisan vendor:publish --tag=teamwork-config --force         # or: sail artisan ...
+ddev artisan migrate                                              # or: sail artisan ...
 ```
 
 Development is done against the symlinked copy at `packages/bigcalm/laracollab-teamwork-import/src/`. An identical copy lives at `<standalone-repo>/src/` (the standalone repo). Keep both in sync with `rsync` or `cp` after edits.
@@ -16,8 +18,12 @@ Development is done against the symlinked copy at `packages/bigcalm/laracollab-t
 ## Build and test
 
 - Lint: `find src -name '*.php' -exec php -l {} \;`
-- Test: `ddev artisan teamwork:import --entities=users,companies` (quick subset)
-- Wipe and re-import: `ddev artisan db:wipe && ddev artisan migrate --seed && ddev artisan teamwork:import`
+- Unit/feature tests (standalone): `vendor/bin/phpunit`
+- Wipe and re-import: `ddev artisan db:wipe && ddev artisan migrate --seed && ddev artisan teamwork:import` — substitute `ddev` with `sail` if using Laravel Sail.
+- Host tests (against real LaraCollab models): `bin/host-test.sh /path/to/lara-collab`
+  - Auto-detects ddev, Laravel Sail, or native PHP.
+  - The host test file lives at `tests/Feature/TeamworkImportHostTest.php` in the lara-collab repo.
+  - Does not commit to the host repo.
 
 ## Code style
 
@@ -59,7 +65,7 @@ These were determined by inspecting live API responses and differ from common as
 
 ## Gotchas
 
-- **Config caching** — the published `config/teamwork.php` takes precedence over the package file. After changing field maps, run `ddev artisan vendor:publish --tag=teamwork-config --force` to sync.
+- **Config caching** — the published `config/teamwork.php` takes precedence over the package file. After changing field maps, run `ddev artisan vendor:publish --tag=teamwork-config --force` to sync (substitute `sail` for `ddev` as needed).
 - **`allRationalised` variable** — must be declared, populated, and passed through the `done` callback in three separate locations. Missing any one causes `Undefined variable` or `Undefined array key` errors.
 - **`recordMapping` inside `resolveOrCreatePlaceholderUser`** — must use `'user'` as the teamwork type, not `$this->teamworkType`. Otherwise the mapping stores `(id, time_entry, User)` and the find by `(id, user)` fails.
 - **Two copies** — edits in `<standalone-repo>/src/` must be synced to `packages/bigcalm/laracollab-teamwork-import/src/` (the ddev-visible copy). Use `rsync -a --delete` or `cp`.

@@ -472,6 +472,36 @@ All fixtures follow the OpenAPI spec:
 
 Or singular-wrapper where applicable: `{"tasks": {"task": [...]}}`.
 
+### Host (LaraCollab) test suite
+
+A separate test file (`tests/Feature/TeamworkImportHostTest.php`) lives in the **lara-collab host repo** and runs against real `App\Models` with SQLite in-memory. It validates:
+
+- Column fillability (e.g. `first_name`/`last_name` on User not being `$fillable`)
+- NOT NULL constraints (e.g. `hidden_from_clients`, `billable` on Task)
+- Observer suppression (`BasePersister::createModel` uses `Model::withoutEvents`)
+- Spatie role assignment
+- Default values and model casts (`estimation => decimal`, `billable => boolean`)
+
+Run with:
+
+```bash
+bin/host-test.sh /path/to/lara-collab
+```
+
+The script auto-detects ddev, Laravel Sail, or native PHP. Falls back to manual instructions if none found.
+
+Or manually:
+
+```bash
+cd /path/to/lara-collab
+rsync -a --delete /path/to/standalone-repo/ packages/bigcalm/laracollab-teamwork-import/
+ddev composer update bigcalm/laracollab-teamwork-import --no-interaction   # or: sail composer update ...
+ddev artisan vendor:publish --tag=teamwork-config --force                  # or: sail artisan ...
+ddev exec vendor/bin/pest tests/Feature/TeamworkImportHostTest.php          # or: sail exec ...
+```
+
+The host test uses `RefreshDatabase` with SQLite `:memory:`, so it runs fast (~0.5s for 8 tests) and does not touch the real MySQL database.
+
 ### Known bugs captured by tests
 
 `AttachmentPersister.php:36` references undefined variable `$taskIds` instead of `$versionTasks`. The `empty()` check on an undefined variable always returns `true`, so all files are skipped with `no_related_tasks`. The `foreach ($taskIds ...)` loop is dead code.

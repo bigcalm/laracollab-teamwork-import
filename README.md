@@ -54,6 +54,8 @@ php artisan teamwork:import --queue
 
 ## Testing
 
+### Standalone (package-level)
+
 ```bash
 composer install
 vendor/bin/phpunit
@@ -63,3 +65,31 @@ Tests use an in-memory SQLite database and `Http::fake()` to stub the Teamwork A
 
 - **Unit tests** cover transformers (pure data mapping, no DB)
 - **Feature tests** cover persisters, the import service, and the CLI command
+
+### Host (against real LaraCollab models)
+
+Validates that import output conforms to real `App\Models` schemas, fillables, casts, NOT NULL constraints, and observers. The `bin/host-test.sh` script auto-detects ddev, Laravel Sail, or native PHP.
+
+```bash
+bin/host-test.sh /path/to/lara-collab
+```
+
+Or manually with ddev:
+
+```bash
+cd /path/to/lara-collab
+rsync -a --delete /path/to/standalone-repo/ packages/bigcalm/laracollab-teamwork-import/
+ddev composer update bigcalm/laracollab-teamwork-import --no-interaction
+ddev artisan vendor:publish --tag=teamwork-config --force
+ddev exec vendor/bin/pest tests/Feature/TeamworkImportHostTest.php
+```
+
+Or manually with Laravel Sail:
+
+```bash
+cd /path/to/lara-collab
+rsync -a --delete /path/to/standalone-repo/ packages/bigcalm/laracollab-teamwork-import/
+sail composer update bigcalm/laracollab-teamwork-import --no-interaction
+sail artisan vendor:publish --tag=teamwork-config --force
+sail exec vendor/bin/pest tests/Feature/TeamworkImportHostTest.php
+```
