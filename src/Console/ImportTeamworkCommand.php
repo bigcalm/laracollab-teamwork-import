@@ -86,11 +86,12 @@ class ImportTeamworkCommand extends Command
                     if ($phase === 'page') {
                         [$totalSoFar, $totalPages] = $extra;
                         $pageInfo = $totalPages ? "page {$n1}/{$totalPages}" : "page {$n1}";
-                        $this->output->write("\r <comment>{$label}</comment> <fg=gray>{$pageInfo} ({$totalSoFar} records)...</>");
+                        $this->output->write("\r   <fg=gray>{$pageInfo} ({$totalSoFar} records)...</>");
                     }
 
                     if ($phase === 'project') {
-                        $this->output->write("\r <comment>Time Logs</comment> <fg=cyan>{$label}</> <fg=gray>[{$n1}/{$n2}]</>  ");
+                        $this->output->write("\r\033[K");
+                        $this->output->writeln(" <comment>Time Logs</comment> <fg=cyan>{$label}</> <fg=gray>[{$n1}/{$n2}]</>");
                     }
 
                     if ($phase === 'after') {

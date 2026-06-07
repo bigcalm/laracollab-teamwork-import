@@ -27,6 +27,9 @@ Development is done against the symlinked copy at `packages/bigcalm/laracollab-t
 
 ## Code style
 
+- **Tests must accompany every code change** — new features, bug fixes, config changes,
+  and command additions all require corresponding test coverage. Run `vendor/bin/phpunit`
+  before finalising any changes.
 - Namespace: `LaraCollab\TeamworkImport`
 - No docblocks on obvious methods. No `@param`/`@return` unless types cannot be declared.
 - Config keys use `snake_case`. API field_map keys use the **exact camelCase** from the Teamwork v3 JSON response (determined by live dumps, not guesswork).
