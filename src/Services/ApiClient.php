@@ -268,6 +268,11 @@ class ApiClient
         return $this->paginate('files.json');
     }
 
+    public function getProjectFiles(int $projectId): Collection
+    {
+        return $this->paginate("projects/{$projectId}/files.json");
+    }
+
     public function getProjectPeople(int $projectId): Collection
     {
         return $this->paginate("projects/{$projectId}/people.json");

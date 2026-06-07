@@ -1,0 +1,39 @@
+{
+    "files": [
+        {
+            "id": 5000,
+            "originalName": "screenshot.png",
+            "description": "Homepage screenshot",
+            "size": 204800,
+            "downloadURL": "/files/5000/download",
+            "projectId": 1,
+            "uploadedBy": 1
+        },
+        {
+            "id": 5001,
+            "originalName": "report.pdf",
+            "description": "Monthly report",
+            "size": 1048576,
+            "downloadURL": "/files/5001/download",
+            "projectId": 1,
+            "uploadedByUserID": 99
+        },
+        {
+            "id": 5002,
+            "originalName": "notes.txt",
+            "description": null,
+            "size": 1024,
+            "downloadURL": "/files/5002/download",
+            "projectId": 1,
+            "uploadedBy": null
+        }
+    ],
+    "meta": {
+        "page": {
+            "pageOffset": 1,
+            "pageSize": 100,
+            "hasMore": false,
+            "count": 3
+        }
+    }
+}

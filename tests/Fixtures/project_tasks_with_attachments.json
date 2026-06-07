@@ -1,0 +1,45 @@
+{
+    "tasks": {
+        "task": [
+            {
+                "id": 10,
+                "name": "Set up database",
+                "projectId": 1,
+                "attachments": [
+                    {"type": "files", "id": 5000}
+                ]
+            },
+            {
+                "id": 11,
+                "name": "Design landing page",
+                "projectId": 1,
+                "attachments": [
+                    {"type": "files", "id": 5000},
+                    {"type": "files", "id": 5001}
+                ]
+            },
+            {
+                "id": 12,
+                "name": "Build REST endpoints",
+                "projectId": 1,
+                "attachments": []
+            },
+            {
+                "id": 13,
+                "name": "Write tests",
+                "projectId": 1,
+                "attachments": [
+                    {"type": "notebooks", "id": 999}
+                ]
+            }
+        ]
+    },
+    "meta": {
+        "page": {
+            "pageOffset": 1,
+            "pageSize": 100,
+            "hasMore": false,
+            "count": 4
+        }
+    }
+}
