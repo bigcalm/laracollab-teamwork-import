@@ -140,7 +140,6 @@ return [
                 'createdByUserId'  => 'created_by_user_id',
                 'priority'         => 'priority_id',
                 'projectId'        => 'project_id',
-                'companyId'        => 'client_company_id',
             ],
         ],
 

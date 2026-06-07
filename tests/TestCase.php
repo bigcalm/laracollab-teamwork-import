@@ -124,7 +124,6 @@ abstract class TestCase extends Orchestra
             $table->foreignId('group_id')->nullable()->constrained('task_groups');
             $table->foreignId('assigned_to_user_id')->nullable()->constrained('users');
             $table->foreignId('project_id')->nullable()->constrained('projects');
-            $table->foreignId('client_company_id')->nullable()->constrained('client_companies');
             $table->foreignId('created_by_user_id')->nullable()->constrained('users');
             $table->foreignId('priority_id')->nullable()->constrained('task_priorities');
             $table->integer('number')->nullable();

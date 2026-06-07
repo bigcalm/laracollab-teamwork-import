@@ -21,7 +21,6 @@ class TaskTransformerTest extends TestCase
             'assigneeUserIds'  => 'assigned_to_user_id',
             'priority'         => 'priority_id',
             'projectId'        => 'project_id',
-            'companyId'        => 'client_company_id',
         ];
     }
 
@@ -35,7 +34,6 @@ class TaskTransformerTest extends TestCase
             'tasklistId' => 5,
             'assigneeUserIds' => [1],
             'projectId' => 10,
-            'companyId' => 3,
         ];
 
         $result = TaskTransformer::transform($data, $this->fieldMap);
@@ -47,7 +45,6 @@ class TaskTransformerTest extends TestCase
         $this->assertSame(5, $result['group_id']);
         $this->assertSame(1, $result['assigned_to_user_id']);
         $this->assertSame(10, $result['project_id']);
-        $this->assertSame(3, $result['client_company_id']);
     }
 
     public function test_transform_estimate_minutes_to_hours(): void

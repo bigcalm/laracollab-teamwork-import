@@ -80,7 +80,7 @@ class TaskPersister extends BasePersister
 
                 $tagIds = $taskData['tagIds'] ?? [];
 
-                unset($attributes['teamwork_id'], $attributes['client_company_id']);
+                unset($attributes['teamwork_id']);
 
                 $task = $this->createModel($attributes);
 
