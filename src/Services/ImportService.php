@@ -78,6 +78,14 @@ class ImportService
                 $importRun, $this->apiClient, $this->idMappingService, $role
             );
 
+            if (method_exists($persister, 'setOnProjectProgress') && $onProgress) {
+                $persister->setOnProjectProgress(
+                    function (string $projectLabel, int $current, int $total) use ($onProgress, $entityKey, $label) {
+                        call_user_func($onProgress, 'project', $entityKey, $projectLabel, $current, $total);
+                    }
+                );
+            }
+
             $fetched = 0;
             $imported = 0;
             $skipped = [];

@@ -91,6 +91,16 @@ class UserPersister extends BasePersister
             return $this->role ?? config('teamwork.client_role');
         }
 
+        if (config('teamwork.client_by_company', false)) {
+            $companyId = $userData['companyId'] ?? null;
+            if ($companyId !== null) {
+                $localCompany = $this->idMappingService->find((int) $companyId, 'company');
+                if ($localCompany !== null) {
+                    return $this->role ?? config('teamwork.client_role');
+                }
+            }
+        }
+
         return $this->role ?? config('teamwork.default_role');
     }
 }

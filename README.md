@@ -27,7 +27,8 @@ TEAMWORK_DEFAULT_ROLE=developer
 # Full import (all entities except files)
 php artisan teamwork:import
 
-# Partial import
+# Partial import (comma-separated entity keys)
+# Valid keys: companies, users, tags, projects, tasklists, tasks, time, comments
 php artisan teamwork:import --entities=users,companies
 
 # Single project

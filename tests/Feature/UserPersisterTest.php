@@ -124,4 +124,33 @@ class UserPersisterTest extends TestCase
         }
         $this->assertTrue($hasUnresolvedCompany);
     }
+
+    public function test_client_by_company_assigns_client_role(): void
+    {
+        config(['teamwork.client_by_company' => true]);
+
+        $company = ClientCompany::create(['name' => 'Acme Corp']);
+
+        \LaraCollab\TeamworkImport\Models\IdMapping::create([
+            'teamwork_id' => 1,
+            'teamwork_type' => 'company',
+            'local_id' => $company->id,
+            'local_type' => (new ClientCompany)->getMorphClass(),
+            'import_run_id' => $this->importRun->id,
+        ]);
+
+        Http::fake([
+            'test.teamwork.com/projects/api/v3/people.json*' => Http::response(
+                \json_decode(\file_get_contents(__DIR__ . '/../Fixtures/users.json'), true)
+            ),
+        ]);
+
+        $result = $this->persister->run();
+
+        $john = \LaraCollab\TeamworkImport\Tests\Stubs\Models\User::where('email', 'john.doe@example.com')->first();
+        $this->assertNotNull($john);
+
+        $jane = \LaraCollab\TeamworkImport\Tests\Stubs\Models\User::where('email', 'jane.smith@example.com')->first();
+        $this->assertNotNull($jane);
+    }
 }

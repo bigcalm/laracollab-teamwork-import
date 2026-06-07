@@ -89,6 +89,10 @@ class ImportTeamworkCommand extends Command
                         $this->output->write("\r <comment>{$label}</comment> <fg=gray>{$pageInfo} ({$totalSoFar} records)...</>");
                     }
 
+                    if ($phase === 'project') {
+                        $this->output->write("\r <comment>Time Logs</comment> <fg=cyan>{$label}</> <fg=gray>[{$n1}/{$n2}]</>  ");
+                    }
+
                     if ($phase === 'after') {
                         [$fetched, $error] = $extra;
                         $imported = $n1;
