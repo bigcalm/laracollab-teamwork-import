@@ -34,11 +34,12 @@ class IdMappingService
 
     public function store(int $teamworkId, string $teamworkType, Model $localModel, int $importRunId): IdMapping
     {
-        return IdMapping::create([
+        return IdMapping::firstOrCreate([
             'teamwork_id' => $teamworkId,
             'teamwork_type' => $teamworkType,
-            'local_id' => $localModel->getKey(),
             'local_type' => $localModel->getMorphClass(),
+        ], [
+            'local_id' => $localModel->getKey(),
             'import_run_id' => $importRunId,
         ]);
     }

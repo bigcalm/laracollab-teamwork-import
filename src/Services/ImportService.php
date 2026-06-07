@@ -3,7 +3,6 @@
 namespace LaraCollab\TeamworkImport\Services;
 
 use LaraCollab\TeamworkImport\Models\ImportRun;
-use LaraCollab\TeamworkImport\Services\Persisters\AttachmentPersister;
 use LaraCollab\TeamworkImport\Services\Persisters\CommentPersister;
 use LaraCollab\TeamworkImport\Services\Persisters\CompanyPersister;
 use LaraCollab\TeamworkImport\Services\Persisters\LabelPersister;
@@ -24,7 +23,6 @@ class ImportService
         'tasks' => TaskPersister::class,
         'time' => TimeLogPersister::class,
         'comments' => CommentPersister::class,
-        'files' => AttachmentPersister::class,
     ];
 
     public function __construct(
@@ -140,7 +138,6 @@ class ImportService
             'tasks' => 'Tasks',
             'time' => 'Time Logs',
             'comments' => 'Comments',
-            'files' => 'Attachments',
         ];
 
         return $labels[$entityKey] ?? $entityKey;
