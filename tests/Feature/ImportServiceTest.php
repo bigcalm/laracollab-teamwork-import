@@ -53,7 +53,7 @@ class ImportServiceTest extends TestCase
         $this->assertContains('before:tags', $phases);
         $this->assertContains('done', $phases);
 
-        $this->assertSame(['users', 'companies', 'tags'], $entitiesSeen);
+        $this->assertSame(['companies', 'users', 'tags'], $entitiesSeen);
     }
 
     public function test_skips_entities(): void

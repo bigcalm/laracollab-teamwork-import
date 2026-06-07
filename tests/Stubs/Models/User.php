@@ -20,8 +20,22 @@ class User extends Model
     {
     }
 
+    public function hasRole($role): bool
+    {
+        return false;
+    }
+
+    public function syncRoles($role): void
+    {
+    }
+
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'project_user');
+    }
+
+    public function clientCompanies(): BelongsToMany
+    {
+        return $this->belongsToMany(ClientCompany::class, 'client_company', 'client_id', 'client_company_id');
     }
 }

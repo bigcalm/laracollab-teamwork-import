@@ -132,6 +132,12 @@ abstract class TestCase extends Orchestra
             $table->timestamps();
         });
 
+        \Schema::connection('testbench')->create('client_company', function ($table) {
+            $table->foreignId('client_id')->constrained('users');
+            $table->foreignId('client_company_id')->constrained('client_companies');
+            $table->primary(['client_id', 'client_company_id']);
+        });
+
         \Schema::connection('testbench')->create('label_task', function ($table) {
             $table->foreignId('label_id')->constrained('labels');
             $table->foreignId('task_id')->constrained('tasks');
@@ -162,6 +168,7 @@ abstract class TestCase extends Orchestra
             $table->text('description')->nullable();
             $table->bigInteger('size')->nullable();
             $table->string('path')->nullable();
+            $table->string('type', 255)->default('file');
             $table->foreignId('task_id')->constrained('tasks');
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();

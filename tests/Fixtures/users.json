@@ -10,6 +10,7 @@
             "userRate": 5000,
             "avatarUrl": "https://example.com/avatars/1.jpg",
             "companyId": 1,
+            "isClientUser": true,
             "type": "user",
             "isAdmin": false,
             "deleted": false
@@ -24,6 +25,7 @@
             "userRate": 7500,
             "avatarUrl": null,
             "companyId": 1,
+            "isClientUser": false,
             "type": "user",
             "isAdmin": true,
             "deleted": false
@@ -38,6 +40,7 @@
             "userRate": null,
             "avatarUrl": null,
             "companyId": null,
+            "isClientUser": false,
             "type": "user",
             "isAdmin": false,
             "deleted": false

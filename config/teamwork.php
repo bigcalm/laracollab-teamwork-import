@@ -53,6 +53,8 @@ return [
     */
     'default_role' => env('TEAMWORK_DEFAULT_ROLE', 'developer'),
 
+    'client_role' => env('TEAMWORK_CLIENT_ROLE', 'client'),
+
     /*
     |--------------------------------------------------------------------------
     | Entity Configuration
@@ -192,8 +194,8 @@ return [
     |
     */
     'entity_order' => [
-        'users',
         'companies',
+        'users',
         'tags',
         'projects',
         'tasklists',
@@ -201,6 +203,5 @@ return [
         'tasks',
         'time',
         'comments',
-        'files',
     ],
 ];
