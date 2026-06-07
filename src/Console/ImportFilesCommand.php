@@ -11,14 +11,14 @@ use LaraCollab\TeamworkImport\Services\ImportService;
 class ImportFilesCommand extends Command
 {
     protected $signature = 'teamwork:import-files
-        {--project=* : One or more Teamwork project IDs to import files for (all projects if omitted)}';
+        {--project= : Comma-separated Teamwork project IDs to import files for (all projects if omitted)}';
 
     protected $description = 'Import project files and link them to tasks';
 
     public function handle(): int
     {
         $projectIds = $this->option('project');
-        $projectIds = ! empty($projectIds) ? array_map('intval', $projectIds) : null;
+        $projectIds = $projectIds ? array_map('intval', explode(',', $projectIds)) : null;
 
         $lastRun = ImportRun::whereIn('status', ['completed', 'partial'])->latest()->first();
 

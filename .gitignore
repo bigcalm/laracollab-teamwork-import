@@ -2,5 +2,3 @@
 composer.lock
 .phpunit.cache/
 .phpunit.result.cache
-session-*.md
-projectfiles-attachments-session-*.md

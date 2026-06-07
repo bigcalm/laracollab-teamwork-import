@@ -9,8 +9,6 @@ composer require bigcalm/laracollab-teamwork-import
 
 php artisan vendor:publish --tag=teamwork-config
 php artisan migrate
-
-php artisan teamwork:import
 ```
 
 ## Environment
@@ -19,44 +17,64 @@ php artisan teamwork:import
 TEAMWORK_API_SITE_NAME=mycompany
 TEAMWORK_API_TOKEN=xxx
 TEAMWORK_DEFAULT_ROLE=developer
+TEAMWORK_CLIENT_ROLE=client
+TEAMWORK_CLIENT_BY_COMPANY=true
 ```
+
+| Variable | Default | Description |
+|---|---|---|
+| `TEAMWORK_API_SITE_NAME` | — | Teamwork site name (e.g. `mycompany` → `mycompany.teamwork.com`) |
+| `TEAMWORK_API_TOKEN` | — | API token for basic auth |
+| `TEAMWORK_DEFAULT_ROLE` | `developer` | Spatie role assigned to non-client users |
+| `TEAMWORK_CLIENT_ROLE` | `client` | Spatie role assigned to client users |
+| `TEAMWORK_CLIENT_BY_COMPANY` | `false` | When `true`, any user with a resolved `companyId` gets the client role, even without the `isClientUser` API flag |
 
 ## Usage
 
+### Main import: `teamwork:import`
+
+Imports all data except project files. Entities are processed in dependency order (see [Import Order](#import-order)).
+
 ```bash
-# Full import (all entities except files)
+# Full import (all entities)
 php artisan teamwork:import
 
 # Partial import (comma-separated entity keys)
 # Valid keys: companies, users, tags, projects, tasklists, tasks, time, comments
 php artisan teamwork:import --entities=users,companies
 
-# Single project
+# Single Teamwork project
 php artisan teamwork:import --project=456
 
-# Override default role
+# Override role for all imported users (overrides both default_role and client_role)
 php artisan teamwork:import --role=admin
 
 # Dispatch to queue
 php artisan teamwork:import --queue
+```
 
-# Import project files and link to tasks (run after teamwork:import)
+### File import: `teamwork:import-files`
+
+Imports project files and links them to tasks. Must be run after `teamwork:import` so project and task mappings exist.
+
+```bash
+# Import files for all projects
 php artisan teamwork:import-files
 
 # Import files for specific Teamwork project IDs
-php artisan teamwork:import-files --project=67133 --project=498141
+php artisan teamwork:import-files --project=67133,498141
 ```
 
 ## Import Order
 
-1. Client Companies
-2. Users (syncs client users to their companies)
-3. Labels (Tags)
-4. Projects (syncs project-user access)
-5. Task Groups
-6. Tasks (links labels, priorities, assignees)
-7. Time Logs
-8. Comments
+1. **Client Companies** — creates `ClientCompany` records
+2. **Users** — creates `User` records, syncs client company pivot
+3. **Labels (Tags)** — creates `Label` records, deduplicates by name
+4. **Projects** — creates `Project` records linked to client companies, syncs project-user access
+5. **Task Groups** — creates `TaskGroup` records linked to projects
+6. **Tasks** — creates `Task` records linked to projects/groups/users, maps Teamwork priorities to LaraCollab priorities
+7. **Time Logs** — fetches per project (`projects/{id}/time.json`), creates `TimeLog` records linked to tasks and users
+8. **Comments** — creates `Comment` records linked to tasks and users
 
 Attachments are imported separately via `teamwork:import-files` after the main import completes.
 
@@ -82,22 +100,12 @@ Validates that import output conforms to real `App\Models` schemas, fillables, c
 bin/host-test.sh /path/to/lara-collab
 ```
 
-Or manually with ddev:
+Or manually:
 
 ```bash
 cd /path/to/lara-collab
 rsync -a --delete /path/to/standalone-repo/ packages/bigcalm/laracollab-teamwork-import/
-ddev composer update bigcalm/laracollab-teamwork-import --no-interaction
-ddev artisan vendor:publish --tag=teamwork-config --force
-ddev exec vendor/bin/pest tests/Feature/TeamworkImportHostTest.php
-```
-
-Or manually with Laravel Sail:
-
-```bash
-cd /path/to/lara-collab
-rsync -a --delete /path/to/standalone-repo/ packages/bigcalm/laracollab-teamwork-import/
-sail composer update bigcalm/laracollab-teamwork-import --no-interaction
-sail artisan vendor:publish --tag=teamwork-config --force
-sail exec vendor/bin/pest tests/Feature/TeamworkImportHostTest.php
+php composer update bigcalm/laracollab-teamwork-import --no-interaction
+php artisan vendor:publish --tag=teamwork-config --force
+php vendor/bin/pest tests/Feature/TeamworkImportHostTest.php
 ```
