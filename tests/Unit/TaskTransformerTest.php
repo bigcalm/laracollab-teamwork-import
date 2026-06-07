@@ -19,6 +19,7 @@ class TaskTransformerTest extends TestCase
             'estimateMinutes'  => 'estimation',
             'tasklistId'       => 'group_id',
             'assigneeUserIds'  => 'assigned_to_user_id',
+            'priority'         => 'priority_id',
             'projectId'        => 'project_id',
             'companyId'        => 'client_company_id',
         ];

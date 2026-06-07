@@ -67,11 +67,12 @@ class TaskPersister extends BasePersister
             }
 
             if (isset($attributes['priority_id'])) {
-                    $priorityModelClass = config('teamwork.models.task_priority');
-                    $label = $attributes['priority_id'];
-                    $priority = $priorityModelClass::where('label', $label)->orWhere('id', $label)->first();
-                    $attributes['priority_id'] = $priority?->getKey();
-                }
+                $priorityModelClass = config('teamwork.models.task_priority');
+                $label = $attributes['priority_id'];
+                $label = $this->normalisePriorityLabel($label);
+                $priority = $priorityModelClass::where('label', $label)->orWhere('id', $label)->first();
+                $attributes['priority_id'] = $priority?->getKey();
+            }
 
                 $taskNumber++;
                 $attributes['number'] = $taskNumber;
@@ -135,5 +136,19 @@ class TaskPersister extends BasePersister
         }
 
         return $group->getKey();
+    }
+
+    private function normalisePriorityLabel(string $label): string
+    {
+        $map = [
+            'urgent' => 'Very high',
+            'high' => 'High',
+            'medium' => 'Medium',
+            'low' => 'Low',
+            'very low' => 'Very low',
+            'none' => 'Low',
+        ];
+
+        return $map[strtolower($label)] ?? ucfirst(strtolower($label));
     }
 }

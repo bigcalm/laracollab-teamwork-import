@@ -40,7 +40,8 @@ return [
         'site_name'       => env('TEAMWORK_API_SITE_NAME'),
         'timeout'         => (int) env('TEAMWORK_API_TIMEOUT', 30),
         'connect_timeout' => (int) env('TEAMWORK_API_CONNECT_TIMEOUT', 10),
-        'page_size'       => (int) env('TEAMWORK_API_PAGE_SIZE', 100),
+            'page_size'       => (int) env('TEAMWORK_API_PAGE_SIZE', 100),
+            'max_pages'       => (int) env('TEAMWORK_API_MAX_PAGES', 2000),
     ],
 
     /*
@@ -54,6 +55,8 @@ return [
     'default_role' => env('TEAMWORK_DEFAULT_ROLE', 'developer'),
 
     'client_role' => env('TEAMWORK_CLIENT_ROLE', 'client'),
+
+    'client_by_company' => env('TEAMWORK_CLIENT_BY_COMPANY', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -137,6 +140,7 @@ return [
                 'tasklistId'       => 'group_id',
                 'assigneeUserIds'  => 'assigned_to_user_id',
                 'createdByUserId'  => 'created_by_user_id',
+                'priority'         => 'priority_id',
                 'projectId'        => 'project_id',
                 'companyId'        => 'client_company_id',
             ],
