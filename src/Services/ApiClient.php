@@ -24,7 +24,7 @@ class ApiClient
 
     private int $pageSize;
 
-    private int $maxPages = 500;
+    private int $maxPages;
 
     private ?\Closure $onPage = null;
 
@@ -44,6 +44,7 @@ class ApiClient
         $this->timeout = $config['timeout'] ?? 30;
         $this->connectTimeout = $config['connect_timeout'] ?? 10;
         $this->pageSize = $config['page_size'] ?? 100;
+        $this->maxPages = $config['max_pages'] ?? 2000;
     }
 
     public function setOnPageCallback(?\Closure $callback): void
@@ -130,6 +131,10 @@ class ApiClient
                 'pageSize' => $this->pageSize,
             ]);
 
+            if ($response->clientError() && $page > 1) {
+                break;
+            }
+
             $response->throw();
 
             $body = $response->json();
@@ -212,7 +217,7 @@ class ApiClient
             return (bool) $metaPage['hasMore'];
         }
 
-        return count($pageRecords) === $this->pageSize;
+        return count($pageRecords) > 0;
     }
 
     public function getUsers(): Collection
@@ -256,6 +261,11 @@ class ApiClient
     public function getTimeEntries(): Collection
     {
         return $this->paginate('time.json');
+    }
+
+    public function getProjectTimeEntries(int $projectId): Collection
+    {
+        return $this->paginate("projects/{$projectId}/time.json");
     }
 
     public function getComments(): Collection

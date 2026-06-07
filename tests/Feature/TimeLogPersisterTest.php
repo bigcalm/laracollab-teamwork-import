@@ -8,18 +8,32 @@ use LaraCollab\TeamworkImport\Models\ImportRun;
 use LaraCollab\TeamworkImport\Services\ApiClient;
 use LaraCollab\TeamworkImport\Services\IdMappingService;
 use LaraCollab\TeamworkImport\Services\Persisters\TimeLogPersister;
+use LaraCollab\TeamworkImport\Tests\Stubs\Models\Project;
 use LaraCollab\TeamworkImport\Tests\Stubs\Models\Task;
 use LaraCollab\TeamworkImport\Tests\Stubs\Models\User;
 use LaraCollab\TeamworkImport\Tests\TestCase;
 
 class TimeLogPersisterTest extends TestCase
 {
+    private function setUpProjectMapping(ImportRun $importRun): void
+    {
+        $project = Project::create(['name' => 'Test Project']);
+        IdMapping::create([
+            'teamwork_id' => 1,
+            'teamwork_type' => 'project',
+            'local_id' => $project->id,
+            'local_type' => (new Project)->getMorphClass(),
+            'import_run_id' => $importRun->id,
+        ]);
+    }
+
     public function test_imports_time_entries(): void
     {
         $user = User::create(['name' => 'John', 'email' => 'john@example.com', 'password' => 'hash']);
         $task = Task::create(['name' => 'DB Setup']);
 
         $importRun = ImportRun::create(['status' => 'running', 'started_at' => now()]);
+        $this->setUpProjectMapping($importRun);
 
         IdMapping::create([
             'teamwork_id' => 1,
@@ -38,7 +52,7 @@ class TimeLogPersisterTest extends TestCase
         ]);
 
         Http::fake([
-            'test.teamwork.com/projects/api/v3/time.json*' => Http::response(
+            'test.teamwork.com/projects/api/v3/projects/1/time.json*' => Http::response(
                 \json_decode(\file_get_contents(__DIR__ . '/../Fixtures/time.json'), true)
             ),
         ]);
@@ -64,6 +78,7 @@ class TimeLogPersisterTest extends TestCase
     {
         $task = Task::create(['name' => 'DB Setup']);
         $importRun = ImportRun::create(['status' => 'running', 'started_at' => now()]);
+        $this->setUpProjectMapping($importRun);
 
         IdMapping::create([
             'teamwork_id' => 10,
@@ -74,13 +89,13 @@ class TimeLogPersisterTest extends TestCase
         ]);
 
         Http::fake([
-            'test.teamwork.com/projects/api/v3/time.json*' => Http::response(
+            'test.teamwork.com/projects/api/v3/projects/1/time.json*' => Http::response(
                 \json_decode(\file_get_contents(__DIR__ . '/../Fixtures/time.json'), true)
             ),
         ]);
 
         $persister = new TimeLogPersister($importRun, new ApiClient, new IdMappingService);
-        $result = $persister->run();
+        $persister->run();
 
         $this->assertDatabaseHas('users', [
             'email' => 'deleted-99@teamwork-import.local',
@@ -93,6 +108,7 @@ class TimeLogPersisterTest extends TestCase
         $task = Task::create(['name' => 'DB Setup']);
 
         $importRun = ImportRun::create(['status' => 'running', 'started_at' => now()]);
+        $this->setUpProjectMapping($importRun);
 
         IdMapping::create([
             'teamwork_id' => 1,
@@ -111,7 +127,7 @@ class TimeLogPersisterTest extends TestCase
         ]);
 
         Http::fake([
-            'test.teamwork.com/projects/api/v3/time.json*' => Http::response(
+            'test.teamwork.com/projects/api/v3/projects/1/time.json*' => Http::response(
                 \json_decode(\file_get_contents(__DIR__ . '/../Fixtures/time.json'), true)
             ),
         ]);
@@ -123,5 +139,38 @@ class TimeLogPersisterTest extends TestCase
             'minutes' => 90,
             'task_id' => $task->id,
         ]);
+    }
+
+    public function test_invokes_project_progress_callback(): void
+    {
+        $task = Task::create(['name' => 'DB Setup']);
+        $importRun = ImportRun::create(['status' => 'running', 'started_at' => now()]);
+        $this->setUpProjectMapping($importRun);
+
+        IdMapping::create([
+            'teamwork_id' => 10,
+            'teamwork_type' => 'task',
+            'local_id' => $task->id,
+            'local_type' => (new Task)->getMorphClass(),
+            'import_run_id' => $importRun->id,
+        ]);
+
+        Http::fake([
+            'test.teamwork.com/projects/api/v3/projects/1/time.json*' => Http::response(
+                json_encode(['timelogs' => [], 'meta' => ['page' => ['hasMore' => false]]]),
+                200
+            ),
+        ]);
+
+        $progress = [];
+        $persister = new TimeLogPersister($importRun, new ApiClient, new IdMappingService);
+        $persister->setOnProjectProgress(function (string $label, int $current, int $total) use (&$progress) {
+            $progress = [$label, $current, $total];
+        });
+        $persister->run();
+
+        $this->assertSame('Test Project', $progress[0]);
+        $this->assertSame(1, $progress[1]);
+        $this->assertSame(1, $progress[2]);
     }
 }
