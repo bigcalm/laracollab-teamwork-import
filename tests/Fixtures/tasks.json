@@ -13,7 +13,11 @@
                 "createdByUserId": 2,
                 "tagIds": [1],
                 "priority": "high",
-                "status": "active"
+                "status": "active",
+                "commentFollowers": [
+                    {"id": 1, "type": "users"},
+                    {"id": 2, "type": "users"}
+                ]
             },
             {
                 "id": 11,

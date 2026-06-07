@@ -144,6 +144,11 @@ abstract class TestCase extends Orchestra
             $table->primary(['label_id', 'task_id']);
         });
 
+        \Schema::connection('testbench')->create('subscribe_task', function ($table) {
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('task_id')->constrained('tasks');
+        });
+
         \Schema::connection('testbench')->create('time_logs', function ($table) {
             $table->id();
             $table->integer('minutes')->nullable();

@@ -19,4 +19,9 @@ class Task extends Model
     {
         return $this->belongsToMany(Label::class, 'label_task');
     }
+
+    public function subscribedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'subscribe_task');
+    }
 }

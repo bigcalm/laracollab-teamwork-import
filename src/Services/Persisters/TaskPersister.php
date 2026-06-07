@@ -100,6 +100,8 @@ class TaskPersister extends BasePersister
                     }
                 }
 
+                $this->syncSubscribers($taskData, $task);
+
                 $this->recordMapping((int) $taskData['id'], $task);
                 $imported++;
             }
@@ -150,5 +152,32 @@ class TaskPersister extends BasePersister
         ];
 
         return $map[strtolower($label)] ?? ucfirst(strtolower($label));
+    }
+
+    private function syncSubscribers(array $taskData, $task): void
+    {
+        $followers = $taskData['commentFollowers'] ?? [];
+
+        if (empty($followers)) {
+            return;
+        }
+
+        $localUserIds = [];
+
+        foreach ($followers as $follower) {
+            if (($follower['type'] ?? null) !== 'users') {
+                continue;
+            }
+
+            $localUser = $this->idMappingService->find((int) $follower['id'], 'user');
+
+            if ($localUser) {
+                $localUserIds[] = $localUser->getKey();
+            }
+        }
+
+        if (! empty($localUserIds)) {
+            $task->subscribedUsers()->syncWithoutDetaching($localUserIds);
+        }
     }
 }

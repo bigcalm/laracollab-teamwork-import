@@ -49,7 +49,7 @@ class ImportFilesCommandTest extends TestCase
             '*' => Http::response(['meta' => ['page' => ['hasMore' => false]]], 200),
         ]);
 
-        $this->artisan('teamwork:import-files', ['--project' => [1], '--no-interaction' => true])
+        $this->artisan('teamwork:import-files', ['--project' => '1', '--no-interaction' => true])
             ->assertSuccessful();
     }
 
@@ -67,7 +67,7 @@ class ImportFilesCommandTest extends TestCase
             '*' => Http::response('', 500),
         ]);
 
-        $this->artisan('teamwork:import-files', ['--project' => [1], '--no-interaction' => true])
+        $this->artisan('teamwork:import-files', ['--project' => '1', '--no-interaction' => true])
             ->assertFailed();
     }
 }

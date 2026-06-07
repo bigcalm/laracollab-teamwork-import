@@ -98,6 +98,7 @@ class TaskPersisterTest extends TestCase
 
         $task = \LaraCollab\TeamworkImport\Tests\Stubs\Models\Task::where('name', 'Set up database')->first();
         $this->assertTrue($task->labels()->where('label_id', $label->id)->exists());
+        $this->assertTrue($task->subscribedUsers()->where('user_id', $user->id)->exists());
     }
 
     public function test_creates_placeholder_user_for_unknown_creator(): void
