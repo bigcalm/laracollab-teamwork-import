@@ -13,8 +13,7 @@ class ImportTeamworkCommand extends Command
     protected $signature = 'teamwork:import
         {--entities= : Comma-separated subset of entities to import}
         {--role= : Override the default role for imported users}
-        {--project= : Only import a single Project ID from Teamwork}
-        {--queue : Dispatch to queue for async processing}';
+        {--project= : Only import a single Project ID from Teamwork}';
 
     protected $description = 'Import data from Teamwork.com API v3 into LaraCollab';
 
