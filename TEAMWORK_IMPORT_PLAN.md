@@ -172,9 +172,9 @@ No routes, no views, no controllers, no assets.
 ## Import Ordering (FK dependency chain)
 
 | Step | Entity | Teamwork Resource | LaraCollab Model | Depends On |
-|---|---|---|---|---|
-| 1 | Users | `people.json` | `User` | — |
-| 2 | Client Companies | `companies.json` | `ClientCompany` | — |
+|---|---|---|---|---|---|
+| 1 | Client Companies | `companies.json` | `ClientCompany` | — |
+| 2 | Users | `people.json` | `User` | Client companies (for client user pivot) |
 | 3 | Labels | `tags.json` | `Label` | — |
 | 4 | Projects | `projects.json` | `Project` | Client companies |
 | 5 | Task Groups | `tasklists.json` | `TaskGroup` | Projects |
@@ -556,8 +556,8 @@ Skipped records are reported in detail at the end of each import run, grouped by
 | 3 | Migrations + Models (`ImportRun`, `IdMapping`) | DB infrastructure |
 | 4 | `ApiClient` | Gateway — needed by every persister |
 | 5 | `IdMappingService` | FK resolution |
-| 6 | `UserTransformer` + `UserPersister` | Lowest FK dependency |
-| 7 | `CompanyTransformer` + `CompanyPersister` | Second-lowest |
+| 6 | `CompanyTransformer` + `CompanyPersister` | Must precede users for client company sync |
+| 7 | `UserTransformer` + `UserPersister` | Depends on companies (client user pivot) |
 | 8 | `LabelPersister` (tags) | Standalone |
 | 9 | `ProjectTransformer` + `ProjectPersister` | Depends on companies + users |
 | 10 | `TaskGroupTransformer` + `TaskGroupPersister` | Depends on projects |

@@ -24,7 +24,7 @@ TEAMWORK_DEFAULT_ROLE=developer
 ## Usage
 
 ```bash
-# Full import
+# Full import (all entities except files)
 php artisan teamwork:import
 
 # Partial import
@@ -38,19 +38,26 @@ php artisan teamwork:import --role=admin
 
 # Dispatch to queue
 php artisan teamwork:import --queue
+
+# Import project files and link to tasks (run after teamwork:import)
+php artisan teamwork:import-files
+
+# Import files for specific Teamwork project IDs
+php artisan teamwork:import-files --project=67133 --project=498141
 ```
 
 ## Import Order
 
-1. Users
-2. Client Companies
+1. Client Companies
+2. Users (syncs client users to their companies)
 3. Labels (Tags)
 4. Projects (syncs project-user access)
 5. Task Groups
 6. Tasks (links labels, priorities, assignees)
 7. Time Logs
 8. Comments
-9. Attachments
+
+Attachments are imported separately via `teamwork:import-files` after the main import completes.
 
 ## Testing
 
