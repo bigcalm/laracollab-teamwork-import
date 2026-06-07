@@ -18,7 +18,6 @@ TEAMWORK_API_SITE_NAME=mycompany
 TEAMWORK_API_TOKEN=xxx
 TEAMWORK_DEFAULT_ROLE=developer
 TEAMWORK_CLIENT_ROLE=client
-TEAMWORK_CLIENT_BY_COMPANY=true
 ```
 
 | Variable | Default | Description |
@@ -26,8 +25,7 @@ TEAMWORK_CLIENT_BY_COMPANY=true
 | `TEAMWORK_API_SITE_NAME` | — | Teamwork site name (e.g. `mycompany` → `mycompany.teamwork.com`) |
 | `TEAMWORK_API_TOKEN` | — | API token for basic auth |
 | `TEAMWORK_DEFAULT_ROLE` | `developer` | Spatie role assigned to non-client users |
-| `TEAMWORK_CLIENT_ROLE` | `client` | Spatie role assigned to client users |
-| `TEAMWORK_CLIENT_BY_COMPANY` | `false` | When `true`, any user with a resolved `companyId` gets the client role, even without the `isClientUser` API flag |
+| `TEAMWORK_CLIENT_ROLE` | `client` | Spatie role assigned to client users (`isClientUser=true` in API) |
 
 ## Usage
 

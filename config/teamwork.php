@@ -56,8 +56,6 @@ return [
 
     'client_role' => env('TEAMWORK_CLIENT_ROLE', 'client'),
 
-    'client_by_company' => env('TEAMWORK_CLIENT_BY_COMPANY', false),
-
     /*
     |--------------------------------------------------------------------------
     | Entity Configuration
